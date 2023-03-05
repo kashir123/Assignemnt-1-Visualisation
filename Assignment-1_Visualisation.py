@@ -22,7 +22,7 @@ def read_dataSet(path):
     return df
 
 
-def draw_line_plot_graph(x,y):
+def draw_line_plot_graph(x,y,y1):
     """
     Line plot graph 
     
@@ -40,11 +40,18 @@ def draw_line_plot_graph(x,y):
     #set the size of the figure
     plt.figure(figsize=(15,10))
     #labels
-    plt.title("Fuel consumption over the year")
+    plt.title("Fuel consumption and Emissions over the year 2000-2022"
+              , fontweight = "bold")
     plt.xlabel("YEAR")
-    plt.ylabel("Fuel Consumption")
+    plt.ylabel("Fuel Consumption and Emission")
+    #yticks
+    plt.yticks(np.arange(0,300000,50000))
     # plot
-    plt.plot(x, y)
+    plt.plot(x, y, label = "Fuel Consumption")
+    plt.plot(x,y1, label = "Emissions")
+    
+    #legend
+    plt.legend(loc = "upper left")
   
     # setting xticks
     plt.xticks(np.arange(2000,2022,2))
@@ -52,7 +59,7 @@ def draw_line_plot_graph(x,y):
     plt.show()
 
 
-def draw_pie_plot_graph(x, y):
+def draw_pie_plot_graph(x, y, title):
     """
     Pie plot graph 
     
@@ -63,10 +70,15 @@ def draw_pie_plot_graph(x, y):
     """
     #set the size of the figure
     plt.figure(figsize=(14,9))
+    
+    #labels
+    plt.title(title, fontweight = "bold")
+    
     # plot
     plt.pie(x
           , labels = y
           , autopct = "%1.2f%%")
+    
     # plot show
     plt.show()
     
@@ -90,6 +102,13 @@ def draw_bar_plot_graph(x, y):
     #adding axes
     ax = fig.add_axes([0,0,1,1])
     
+    #labels
+    ax.set_title("Top five Make who consume most of the fuel between 2000-2022"
+                 , fontweight = "bold")
+    ax.set_xlabel("Make")
+    ax.set_ylabel("Fuel Consumption")
+    
+    
     # plot
     ax.bar(x, y)
     
@@ -106,15 +125,31 @@ dataset_line_plot = (df
                       .sum()
                       .reset_index()
                       )
+#Grouping the dataset at years and get sum of the EMISSIONS by the vehicle
+dataset_line_plot_emission = (df
+                      .groupby("YEAR")['EMISSIONS']
+                      .sum()
+                      .reset_index()
+                      )
 
 """
 Grouping the dataset at years and fuel consumption but sorted 
 it in descending order used top five for pie plot
 """
-dataset_pie_plot = (df
+dataset_pie_plot_consumption = (df
                      .groupby("YEAR")['FUEL CONSUMPTION']
                      .sum().sort_values(ascending = False)
                      .reset_index())
+
+"""
+Grouping the dataset at years and EMISSIONS but sorted 
+it in descending order used top five for pie plot
+"""
+dataset_pie_plot_emission = (df
+                     .groupby("YEAR")['EMISSIONS']
+                     .sum().sort_values(ascending = False)
+                     .reset_index())
+
 """
 Grouping the datset at make and fuel consumption in descending
 order and pass top five values on the x and y axis to plot bar chat
@@ -123,11 +158,23 @@ dataset_bar_plot = (df
                     .groupby("MAKE")['FUEL CONSUMPTION']
                     .sum().sort_values(ascending = False)
                     .reset_index())
+
+
 # calling the function for line plot
-draw_line_plot_graph(dataset_line_plot['YEAR'], dataset_line_plot['FUEL CONSUMPTION'])
+draw_line_plot_graph(dataset_line_plot['YEAR']
+                     , dataset_line_plot['FUEL CONSUMPTION']
+                     , dataset_line_plot_emission['EMISSIONS'])
 
 # calling the function for pie plot
-draw_pie_plot_graph(dataset_pie_plot['FUEL CONSUMPTION'][:5], dataset_pie_plot['YEAR'][:5])
+draw_pie_plot_graph(dataset_pie_plot_consumption['FUEL CONSUMPTION'][:5]
+                    , dataset_pie_plot_consumption['YEAR'][:5]
+                    , "Top Five years fuel consumption")
+
+# calling the function for pie plot
+draw_pie_plot_graph(dataset_pie_plot_emission['EMISSIONS'][:5]
+                    , dataset_pie_plot_emission['YEAR'][:5]
+                    , "Top Five years Emissions by the vehicle")
 
 # calling function for the bar plot
-draw_bar_plot_graph(dataset_bar_plot['MAKE'][:5], dataset_bar_plot['FUEL CONSUMPTION'][:5])
+draw_bar_plot_graph(dataset_bar_plot['MAKE'][:5]
+                    , dataset_bar_plot['FUEL CONSUMPTION'][:5])
