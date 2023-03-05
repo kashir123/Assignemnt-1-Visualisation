@@ -115,66 +115,66 @@ def draw_bar_plot_graph(x, y):
     #show plot
     plt.show()
     
-
-# calling the function to read dataset
-df = read_dataSet('Fuel_Consumption_2000-2022.csv')
-
-#Grouping the dataset at years and get sum of the Fuel consumption
-dataset_line_plot = (df
-                      .groupby("YEAR")['FUEL CONSUMPTION']
-                      .sum()
-                      .reset_index()
-                      )
-#Grouping the dataset at years and get sum of the EMISSIONS by the vehicle
-dataset_line_plot_emission = (df
-                      .groupby("YEAR")['EMISSIONS']
-                      .sum()
-                      .reset_index()
-                      )
-
-"""
-Grouping the dataset at years and fuel consumption but sorted 
-it in descending order used top five for pie plot
-"""
-dataset_pie_plot_consumption = (df
-                     .groupby("YEAR")['FUEL CONSUMPTION']
-                     .sum().sort_values(ascending = False)
-                     .reset_index())
-
-"""
-Grouping the dataset at years and EMISSIONS but sorted 
-it in descending order used top five for pie plot
-"""
-dataset_pie_plot_emission = (df
-                     .groupby("YEAR")['EMISSIONS']
-                     .sum().sort_values(ascending = False)
-                     .reset_index())
-
-"""
-Grouping the datset at make and fuel consumption in descending
-order and pass top five values on the x and y axis to plot bar chat
-"""
-dataset_bar_plot = (df
-                    .groupby("MAKE")['FUEL CONSUMPTION']
-                    .sum().sort_values(ascending = False)
-                    .reset_index())
-
-
-# calling the function for line plot
-draw_line_plot_graph(dataset_line_plot['YEAR']
-                     , dataset_line_plot['FUEL CONSUMPTION']
-                     , dataset_line_plot_emission['EMISSIONS'])
-
-# calling the function for pie plot
-draw_pie_plot_graph(dataset_pie_plot_consumption['FUEL CONSUMPTION'][:5]
-                    , dataset_pie_plot_consumption['YEAR'][:5]
-                    , "Top Five years fuel consumption")
-
-# calling the function for pie plot
-draw_pie_plot_graph(dataset_pie_plot_emission['EMISSIONS'][:5]
-                    , dataset_pie_plot_emission['YEAR'][:5]
-                    , "Top Five years Emissions by the vehicle")
-
-# calling function for the bar plot
-draw_bar_plot_graph(dataset_bar_plot['MAKE'][:5]
-                    , dataset_bar_plot['FUEL CONSUMPTION'][:5])
+if __name__=="__main__":
+    # calling the function to read dataset
+    df = read_dataSet('Fuel_Consumption_2000-2022.csv')
+    
+    #Grouping the dataset at years and get sum of the Fuel consumption
+    dataset_line_plot = (df
+                          .groupby("YEAR")['FUEL CONSUMPTION']
+                          .sum()
+                          .reset_index()
+                          )
+    #Grouping the dataset at years and get sum of the EMISSIONS by the vehicle
+    dataset_line_plot_emission = (df
+                          .groupby("YEAR")['EMISSIONS']
+                          .sum()
+                          .reset_index()
+                          )
+    
+    """
+    Grouping the dataset at years and fuel consumption but sorted 
+    it in descending order used top five for pie plot
+    """
+    dataset_pie_plot_consumption = (df
+                         .groupby("YEAR")['FUEL CONSUMPTION']
+                         .sum().sort_values(ascending = False)
+                         .reset_index())
+    
+    """
+    Grouping the dataset at years and EMISSIONS but sorted 
+    it in descending order used top five for pie plot
+    """
+    dataset_pie_plot_emission = (df
+                         .groupby("YEAR")['EMISSIONS']
+                         .sum().sort_values(ascending = False)
+                         .reset_index())
+    
+    """
+    Grouping the datset at make and fuel consumption in descending
+    order and pass top five values on the x and y axis to plot bar chat
+    """
+    dataset_bar_plot = (df
+                        .groupby("MAKE")['FUEL CONSUMPTION']
+                        .sum().sort_values(ascending = False)
+                        .reset_index())
+    
+    
+    # calling the function for line plot
+    draw_line_plot_graph(dataset_line_plot['YEAR']
+                         , dataset_line_plot['FUEL CONSUMPTION']
+                         , dataset_line_plot_emission['EMISSIONS'])
+    
+    # calling the function for pie plot
+    draw_pie_plot_graph(dataset_pie_plot_consumption['FUEL CONSUMPTION'][:5]
+                        , dataset_pie_plot_consumption['YEAR'][:5]
+                        , "Top Five years fuel consumption")
+    
+    # calling the function for pie plot
+    draw_pie_plot_graph(dataset_pie_plot_emission['EMISSIONS'][:5]
+                        , dataset_pie_plot_emission['YEAR'][:5]
+                        , "Top Five years Emissions by the vehicle")
+    
+    # calling function for the bar plot
+    draw_bar_plot_graph(dataset_bar_plot['MAKE'][:5]
+                        , dataset_bar_plot['FUEL CONSUMPTION'][:5])
